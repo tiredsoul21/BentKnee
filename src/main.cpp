@@ -11,14 +11,14 @@
 
 #include <string>
 
-#include "HistoryContainer.h"
+#include "PriceContainer.h"
 
-void parseCSV(HistoryContainer* container);
+void parseCSV(PriceContainer* container);
 
 int main()
 {
     std::cout << "Start-------------------" << std::endl;
-    HistoryContainer* container = new HistoryContainer();
+    PriceContainer* container = new PriceContainer();
     container->setInputDateFormat("MMDDYYYY hhmmss");
     container->setDisplayDateFormat("YYYY-MM-DD");
     
@@ -91,7 +91,7 @@ int main()
     return 0;
 }
 
-void parseCSV(HistoryContainer* container)
+void parseCSV(PriceContainer* container)
 {
     std::ifstream  data("C:/Users/derri/Downloads/QQQ.csv");
     std::string line;

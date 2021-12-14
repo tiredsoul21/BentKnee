@@ -1,11 +1,11 @@
-#include "Datenum.h"
+#include "DateEngine.h"
 
 #include <iostream>
 
 /*********************** CONSTRUCTORS ******************************/
 
-// Datenum() -- default
-Datenum::Datenum()
+// DateEngine() -- default
+DateEngine::DateEngine()
 {
     myDateStr = "1970/01/01 00:00:00";
     myFormat = "MM/DD/YYYY hh:mm:ss";
@@ -31,7 +31,7 @@ Datenum::Datenum()
 }
 
 // Datenum(string, string) //
-Datenum::Datenum(std::string dateString, std::string dateFormat) : Datenum()
+DateEngine::DateEngine(std::string dateString, std::string dateFormat) : DateEngine()
 {
     // We're going validate the format, then the string 
     setDateFormat(dateFormat);
@@ -42,20 +42,20 @@ Datenum::Datenum(std::string dateString, std::string dateFormat) : Datenum()
         readDateString();
 }
 
-// Datenum(double) //
-Datenum::Datenum(double datenum) : Datenum()
+// DateEngine(double) //
+DateEngine::DateEngine(double datenum) : DateEngine()
 {
     setDatenum(datenum);
 }
 
 /*********************** DESTRUCTORS *******************************/
 
-Datenum::~Datenum(){ }
+DateEngine::~DateEngine(){ }
 
 /************************** SETTERS ********************************/
 
 // setDateFormat //
-bool Datenum::setDateFormat(std::string dateFormat)
+bool DateEngine::setDateFormat(std::string dateFormat)
 {
     if (validFormat(dateFormat))
     {
@@ -75,7 +75,7 @@ bool Datenum::setDateFormat(std::string dateFormat)
 }
 
 // setDatenum //
-void Datenum::setDatenum(double datenum)
+void DateEngine::setDatenum(double datenum)
 {
     if (datenum > 0)
     {
@@ -93,7 +93,7 @@ void Datenum::setDatenum(double datenum)
 }
 
 // setDateString //
-void Datenum::setDateString(std::string dateString)
+void DateEngine::setDateString(std::string dateString)
 {
     // We're going validate the format, then the string 
     if (validDate(dateString, myFormat) )
@@ -113,97 +113,97 @@ void Datenum::setDateString(std::string dateString)
 /************************** GETTERS ********************************/
 
 // getDateFormat //
-std::string Datenum::getDateFormat()
+std::string DateEngine::getDateFormat()
 {
     return this->myFormat;
 }
 
 // getDatenum //
-double Datenum::getDatenum()
+double DateEngine::getDatenum()
 {
     return this->myDatenum;
 }
 
 // getDateString //
-std::string Datenum::getDateString()
+std::string DateEngine::getDateString()
 {
     return this->myDateStr;
 }
 
 // getYear //
-int Datenum::getYear()
+int DateEngine::getYear()
 {
     return this->myYear;
 }
 
 // getMonth //
-int Datenum::getMonth()
+int DateEngine::getMonth()
 {
     return this->myMonth;
 }
 
 // getDay //
-int Datenum::getDay()
+int DateEngine::getDay()
 {
     return this->myDay;
 }
 
 // getHour //
-int Datenum::getHour()
+int DateEngine::getHour()
 {
     return this->myHour;
 }
 
 // getMinute //
-int Datenum::getMinute()
+int DateEngine::getMinute()
 {
     return this->myMinute;
 }
 
 // getSecond //
-int Datenum::getSecond()
+int DateEngine::getSecond()
 {
     return this->mySecond;
 }
 
 // getEpochYears //
-long Datenum::getEpochYears()
+long DateEngine::getEpochYears()
 {
     return this->myEpochYears;
 }
 
 // getEpochMonths //
-long Datenum::getEpochMonths()
+long DateEngine::getEpochMonths()
 {
     return this->myEpochMonths;
 }
 
 // getEpochWeeks //
-long Datenum::getEpochWeeks()
+long DateEngine::getEpochWeeks()
 {
     return this->myEpochWeeks;
 }
 
 // getEpochDays //
-long Datenum::getEpochDays()
+long DateEngine::getEpochDays()
 {
     return this->myEpochDays;
 }
 
 // getEpochHours //
-long Datenum::getEpochHours()
+long DateEngine::getEpochHours()
 {
     return this->myEpochHours;
 }
 
 // getEpochMinutes //
-long Datenum::getEpochMinutes()
+long DateEngine::getEpochMinutes()
 {
     return this->myEpochMinutes;
 }
 
 // getEpochSeconds //
-long Datenum::getEpochSeconds()
+long DateEngine::getEpochSeconds()
 {
     return this->myEpochSeconds;
 }
@@ -211,7 +211,7 @@ long Datenum::getEpochSeconds()
 /************************ FUNCTIONAL ******************************/
 
 // looseDateString //
-std::string Datenum::looseDateString(std::string givenFormat)
+std::string DateEngine::looseDateString(std::string givenFormat)
 {
     std::string returnString = "";
     generateMyString(givenFormat, returnString);
@@ -219,7 +219,7 @@ std::string Datenum::looseDateString(std::string givenFormat)
 }
 
 // readDateString //
-void Datenum::readDateString()
+void DateEngine::readDateString()
 {
     for (unsigned int i = 0; i < this->myDateStr.length(); ++i)
     {
@@ -338,7 +338,7 @@ void Datenum::readDateString()
 }
 
 // writeDateString //
-void Datenum::writeDateString()
+void DateEngine::writeDateString()
 {
     // First we'll Check if it's just a format change.  If so, only need to do the string.
     //   Will skip to the bottom
@@ -455,7 +455,7 @@ void Datenum::writeDateString()
 }
 
 // generateMyString //
-void Datenum::generateMyString(std::string givenFormat, std::string &outputString)
+void DateEngine::generateMyString(std::string givenFormat, std::string &outputString)
 {
     // If we've made it here the format is already validated
     for (unsigned int i = 0; i < givenFormat.length(); ++i)
@@ -520,7 +520,7 @@ void Datenum::generateMyString(std::string givenFormat, std::string &outputStrin
 }
 
 // isLeapYear //
-bool Datenum::isLeapyear(int givenYear)
+bool DateEngine::isLeapyear(int givenYear)
 {
     // There is a leap year every year divisible by
     // four except for years which are both divisible
@@ -536,7 +536,7 @@ bool Datenum::isLeapyear(int givenYear)
 }
 
 // validFormat //
-bool Datenum::validFormat(std::string givenFormat)
+bool DateEngine::validFormat(std::string givenFormat)
 {
     // Count format tokens for date
     int yearCount = 0;      // must be 2 or 4
@@ -668,7 +668,7 @@ bool Datenum::validFormat(std::string givenFormat)
 }
 
 // validDate //
-bool Datenum::validDate(std::string givenDate, std::string givenFormat)
+bool DateEngine::validDate(std::string givenDate, std::string givenFormat)
 {
     int testYear = -1;
     int testMonth = -1;
@@ -845,7 +845,7 @@ bool Datenum::validDate(std::string givenDate, std::string givenFormat)
 }
 
 // epochLongToDouble
-double Datenum::epochLongToDouble(long  seconds)
+double DateEngine::epochLongToDouble(long  seconds)
 {
     // Get rough estimate of double
     double doubleDatenum = seconds / 86400.0;
@@ -859,14 +859,14 @@ double Datenum::epochLongToDouble(long  seconds)
 }
 
 // epochLongToDouble
-long Datenum::epochDoubleToLong(double day)
+long DateEngine::epochDoubleToLong(double day)
 {
     setDatenum(day);
     int leapSeconds = getLeapSecondsSince(getYear(), getMonth());
     return (long)(day * 86400 + leapSeconds);
 }
 
-int Datenum::getLeapSecondsSince(int year, int month)
+int DateEngine::getLeapSecondsSince(int year, int month)
 {
     int loopYear = 1970;
     int totalLeapSeconds = 0;
