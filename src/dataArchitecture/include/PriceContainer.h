@@ -1,12 +1,22 @@
 /*
- * This Class is used to house price data for a single increment,
+ * This Class is used to house a series of price data.  The form is given
+ * by a mapping, where the datenum forms the key, to the mapping for 
+ * Prices
  */
 
 #ifndef PRICECONTAINER_H
 #define PRICECONTAINER_H
 
-#ifndef TYPEDEFINITIONS_H
-#include "typeDefinitions.h"
+#ifndef DATEENGINE_H
+#include "DateEngine.h"
+#endif
+
+#ifndef PRICE_H
+#include "Price.h"
+#endif
+
+#ifndef CONTAINERTEMPLATE_H
+#include "ContainerTemplate.h"
 #endif
 
 #ifndef CLASSTEMPLATE_H
@@ -14,9 +24,11 @@
 #endif
 
 #include <string>
-#include <vector>
 
-class PriceContainer : public ClassTemplate
+#include <map>
+#include <iterator>
+
+class PriceContainer : public ContainerTemplate<Price>
 {
 public: // Public Members
 
@@ -26,29 +38,14 @@ public: // Public Methods
 
 	// Default Constructor //
 	/*--------------------------------------------------------------
-	 * Description - sets all the data for the container to empty or 
-	 *	trash values
+	 * Description - Empty History 
      * Input(s):
      *   void
 	 * Output(s):
-	 *   PriceContainer - an object containing pricing data for a single
-	 *	increment
+	 *   PriceContainer - an object containing pricing data for a 
+     *   range of increments
 	 ---------------------------------------------------------------*/
 	PriceContainer();
-
-	// Primed Constructor //
-	/*--------------------------------------------------------------
-	 * Description - sets all the data for the container. Does data
-	 *	validation to insure data container is complete
-     * Input(s):
-     *   void
-	 * Output(s):
-	 *   PriceContainer - an object containing pricing data for a single
-	 *	increment
-	 ---------------------------------------------------------------*/
-	PriceContainer(double dateNumber, float openPrice, float closePrice, 
-		           float highPrice, float lowPrice, float adjustedPrice,
-		           int totalVol, char incSize);
 
 	/*********************** DESTRUCTORS *******************************/
 
@@ -57,296 +54,331 @@ public: // Public Methods
 
 	/*********************** SETTERS ***********************************/
     
-    // set Date Strings//
-	/*--------------------------------------------------------------
-	 * Description - sets the dateNum value for a time increment
-	 * Input(s):
-     *   string - the proper & full date time stamp
-     *   string - the display date (formatted how you 
-     * Output(s):
-     *   void
-	 ---------------------------------------------------------------*/    
-    void setDateStrings(std::string properName, std::string displayName);
+	// set Input Date Format //
+    /*--------------------------------------------------------------
+     * Description - sets the date format for the data to be added
+     * Input(s):
+     *   string - a format that contains the format the output string
+	 *		   that is desired.  Use (Y / M / D / h / m / s)
+     --------------------------------------------------------------*/
+    void setInputDateFormat(std::string dateFormat);
 
+    // set Display Date Format //
+    /*--------------------------------------------------------------
+     * Description - sets the date format for the display date for
+     *   all the data to be added
+     * Input(s):
+     *   string - a format that contains the format the output string
+	 *		   that is desired.  Use (Y / M / D / h / m / s)
+     --------------------------------------------------------------*/
+    void setDisplayDateFormat(std::string dateFormat);
+    
 	/*********************** GETTERS ***********************************/
-
-	// getDateNum //
+    
+	// Get Iterator //
 	/*--------------------------------------------------------------
-	 * Description - sets all the data for the container by recursively
-	 * calling the singular sets methods
+	 * Description - get the iterator for a lookup value in History
+     *   from a str / double
+	 * Input(s) - Overload 1:
+	 *   double - a datenum for the increment
+     * Input(s) - Overload 2:
+     *   string - the date string associated with the increment.  This
+     *     should be of the same format used to program the Container
+	 * Output(s):
+	 *   map<double, Price>::iterator - iterator for the data 
+     *   point if there is a match
+	 ---------------------------------------------------------------*/
+	typename std::map<double, Price>::iterator getIter(std::string dateStr);
+    typename std::map<double, Price>::iterator getIter(double datenum);
+    
+    	// Get Begin Iterator //
+	/*--------------------------------------------------------------
+	 * Description - get the iterator for a lookup value in History
+     *   from a str / double
+	 * Input(s) - Overload 1:
+	 *   double - a datenum for the increment
+     * Input(s) - Overload 2:
+     *   string - the date string associated with the increment.  This
+     *     should be of the same format used to program the Container
+	 * Output(s):
+	 *   map<double, Price>::iterator - iterator for the data 
+     *   point if there is a match
+	 ---------------------------------------------------------------*/
+	typename std::map<double, Price>::iterator getBeginIter();
+    
+	// Get Date Number //
+	/*--------------------------------------------------------------
+	 * Description - gets the datenum from a reference str / iter
+     * Input(s) - Overload 1:
+     *   string - the date string associated with the increment.  This
+     *     should be of the same format used to program the Container
+     * Input(s) - Overload 2:
+     *   map<double, Price>::iterator - iterator for the mapping
 	 * Output(s):
 	 *   double - a value for a date with fixed start point (epoch)
 	 *	  format: day.fractionalDay.
 	 *	  smallest increment is 1 second ( 1.1574-5)
 	 ---------------------------------------------------------------*/
-	double getDatenum();
+	double getDatenum(std::string date);
+    double getDatenum(typename std::map<double, Price>::iterator it);
 
-	// getDateStr //
+	// Get Date String //
 	/*--------------------------------------------------------------
 	 * Description - returns the date & time in the form of a string
-	 * Input(s):
-	 *   void
+	 * Input(s) - Overload 1:
+	 *   double - a datenum for the increment
+     * Input(s) - Overload 2:
+     *   map<double, Price>::iterator - iterator for the mapping
 	 * Output(s):
 	 *   string - A date and/or time string containing increments value
 	 ---------------------------------------------------------------*/
-	std::string getDateStr();
+	std::string getDateStr(double date);
+	std::string getDateStr(typename std::map<double, Price>::iterator it);
 
-	// getHigh //
+	// Free Format Datenum String //
+	/*--------------------------------------------------------------
+	 * Description - Returns a loose interpretation of date string
+	 *   to the user.  Does not check formatting, does not sets internals,
+	 *   strictly a get function that populates what it can.
+	 * Input(s) - Overload 1:
+	 *   double - a datenum for the increment
+     * Input(s) - Overload 2:
+     *   string - the date string associated with the increment.  This
+     *     should be of the same format used to program the Container
+     * Input(s) - Overload 3:
+     *   map<double, Price>::iterator - iterator for the mapping
+	 * Output(s):
+	 *   string - representing the time frame of an increment
+	 ---------------------------------------------------------------*/
+	std::string getCustomDateString(double dateNum);
+	std::string getCustomDateString(std::string dateString);
+    std::string getCustomDateString(typename std::map<double, Price>::iterator it);
+
+	// Get High //
 	/*--------------------------------------------------------------
 	 * Description - returns the high price in the increment
-     * Input(s):
-     *   void
+	 * Input(s) - Overload 1:
+	 *   double - a datenum for the increment
+     * Input(s) - Overload 2:
+     *   string - the date string associated with the increment.  This
+     *     should be of the same format used to program the Container
+     * Input(s) - Overload 3:
+     *   map<double, Price>::iterator - iterator for the mapping
 	 * Output(s):
 	 *   float - a value of the highest price during an increment
 	 ---------------------------------------------------------------*/
-	float getHigh();
+	float getHigh(double date);
+	float getHigh(std::string dateString);
+	float getHigh(typename std::map<double, Price>::iterator it);
 
-	// getLow //
+	// Get Low //
 	/*--------------------------------------------------------------
 	 * Description - returns the low price in the increment
-     * Input(s):
-     *   void
+	 * Input(s) - Overload 1:
+	 *   double - a datenum for the increment
+     * Input(s) - Overload 2:
+     *   string - the date string associated with the increment.  This
+     *     should be of the same format used to program the Container
+     * Input(s) - Overload 3:
+     *   map<double, Price>::iterator - iterator for the mapping
 	 * Output(s):
 	 *   float - a value of the lowest price during an increment
 	 ---------------------------------------------------------------*/
-	float getLow();
+	float getLow(double date);
+	float getLow(std::string dateString);
+	float getLow(typename std::map<double, Price>::iterator it);
 
-	// getOpen //
+	// Get Open //
 	/*--------------------------------------------------------------
 	 * Description - returns the opening price of the increment
-     * Input(s):
-     *   void
+	 * Input(s) - Overload 1:
+	 *   double - a datenum for the increment
+     * Input(s) - Overload 2:
+     *   string - the date string associated with the increment.  This
+     *     should be of the same format used to program the Container
+     * Input(s) - Overload 3:
+     *   map<double, Price>::iterator - iterator for the mapping
 	 * Output(s):
 	 *   float - a value of the opening price during an increment
 	 ---------------------------------------------------------------*/
-	float getOpen();
+	float getOpen(double date);
+	float getOpen(std::string dateString);
+	float getOpen(typename std::map<double, Price>::iterator it);
 
-	// getClose //
+	// Get Close //
 	/*--------------------------------------------------------------
-	* Description - returns the close price of the increment
+	 * Description - returns the close price of the increment
+	 * Input(s) - Overload 1:
+	 *   double - a datenum for the increment
+     * Input(s) - Overload 2:
+     *   string - the date string associated with the increment.  This
+     *     should be of the same format used to program the Container
+     * Input(s) - Overload 3:
+     *   map<double, Price>::iterator - iterator for the mapping
 	* Output(s):
 	*   float - a value of the closing price during an increment
 	---------------------------------------------------------------*/
-	float getClose();
+	float getClose(double date);
+	float getClose(std::string dateString);
+	float getClose(typename std::map<double, Price>::iterator it);
 
-	// getClose (Adjusted) //
+	// Get Close (Adjusted) //
 	/*--------------------------------------------------------------
 	 * Description - returns the adjusted close price of the increment
-     * Input(s):
-     *   void
+	 * Input(s) - Overload 1:
+	 *   double - a datenum for the increment
+     * Input(s) - Overload 2:
+     *   string - the date string associated with the increment.  This
+     *     should be of the same format used to program the Container
+     * Input(s) - Overload 3:
+     *   map<double, Price>::iterator - iterator for the mapping
 	 * Output(s):
 	 *   float - a value of the adjusted closing price during an increment
 	 ---------------------------------------------------------------*/
-	float getAdjusted();
+	float getAdjusted(double date);
+	float getAdjusted(std::string dateString);
+	float getAdjusted(typename std::map<double, Price>::iterator it);
 
-	// getVolume //
+	// Get Volume //
 	/*--------------------------------------------------------------
 	 * Description - returns the total trade volume of the increment
-     * Input(s):
-     *   void
+	 * Input(s) - Overload 1:
+	 *   double - a datenum for the increment
+     * Input(s) - Overload 2:
+     *   string - the date string associated with the increment.  This
+     *     should be of the same format used to program the Container
+     * Input(s) - Overload 3:
+     *   map<double, Price>::iterator - iterator for the mapping
 	 * Output(s):
 	 *   int - an value representing total trade volume
 	 ---------------------------------------------------------------*/
-	int getVolume();
+	int getVolume(double date);
+	int getVolume(std::string dateString);
+	int getVolume(typename std::map<double, Price>::iterator it);
 
-	// getIncrement //
+	// Get Increment //
 	/*--------------------------------------------------------------
 	 * Description - returns the increment type for the data object
-     * Input(s):
-     *   void
+	 * Input(s) - Overload 1:
+	 *   double - a datenum for the increment
+     * Input(s) - Overload 2:
+     *   string - the date string associated with the increment.  This
+     *     should be of the same format used to program the Container
+     * Input(s) - Overload 3:
+     *   map<double, Price>::iterator - iterator for the mapping
 	 * Output(s):
 	 *   char - a char in (Y/M/w/d/h/m/s)
 	 ---------------------------------------------------------------*/
-	char getIncrement();
+	char getIncrement(double date);
+	char getIncrement(std::string dateString);
+	char getIncrement(typename std::map<double, Price>::iterator it);
 
-	// Select Data //
+    /********************* Functional *********************************/
+    
+	// Get Epoch Double //
 	/*--------------------------------------------------------------
-	 * Description - Opens a price container, and retrieves the desired
-	 *   price data.
+	 * Description - Takes a standard epoch second and converts it to
+	 *   locally used datenum format <day>.<partialday>
 	 * Input(s):
-	 *   PriceType - selected data to retrieve
+	 *   long - a value representing seconds since epoch
 	 * Output(s):
-	 *   float - single price datum for the iterator supplied
+	 *   double - represents current day since epoch
 	 ---------------------------------------------------------------*/
-	float selectData(TypeDefinitions::PriceType selected);
+	double getEpochDouble(long seconds);
 
+	// Get Epoch Long //
+	/*--------------------------------------------------------------
+	 * Description - Takes a locally used datenum format <day>.<partialday>
+	 *   and converts it to a standard epoch time
+	 * Input(s):
+	 *   double - represents current day since epoch
+	 * Output(s):
+	 *   long - a value representing seconds since epoch
+	 ---------------------------------------------------------------*/
+	long getEpochLong(double days);
+    
+    // Add Increment //
+	/*--------------------------------------------------------------
+	 * Description - sets all the data for a price container and adds
+     *   the increment to the stack.
+     * Input(s):
+     *   double - dateNumber associated with the increment
+     *   float - the open price for the increment
+     *   float - the close price for the increment
+     *   float - the high price for the increment
+     *   float - the low price for the increment
+     *   float - the adjusted price for the increment
+     *   int - the total volume for the increment
+     *   char - the increment size (Y/M/w/d/h/m/s)
+	 * Output(s):
+	 *   bool - a success bool for having added, true = added
+	 *	increment
+	 ---------------------------------------------------------------*/
+	bool add(double dateNumber, float openPrice, float closePrice, 
+		     float highPrice, float lowPrice, float adjustedPrice,
+		     int totalVol, char incSize);
+   
+    // Add Increment //
+	/*--------------------------------------------------------------
+	 * Description - sets all the data for a price container and adds
+     *   the increment to the stack.
+     * Input(s):
+     *   string - a date string associated with the increment
+     *   float - the open price for the increment
+     *   float - the close price for the increment
+     *   float - the high price for the increment
+     *   float - the low price for the increment
+     *   float - the adjusted price for the increment
+     *   int - the total volume for the increment
+     *   char - the increment size (Y/M/w/d/h/m/s)
+	 * Output(s):
+	 *   bool - a success bool for having added, true = added
+	 *	increment
+	 ---------------------------------------------------------------*/
+	bool add(std::string dateString, float openPrice, float closePrice, 
+		     float highPrice, float lowPrice, float adjustedPrice,
+		     int totalVol, char incSize);
+    
 private: // Private Members
-
-	// dateString - a string holding the last saved date string
-	std::string myDateString;
-	std::string myDisplayString;
-
-	// dateNum - a double containing the last entered date for the object
-	double myDatenum;
-
-	// low - the lowest price value during an increment
-	float myLow;
-
-	// high - the highest price value during an increment
-	float myHigh;
-
-	// open - the opening value during an increment (first)
-	float myOpen;
-
-	// close - the closing value during an increment (last)
-	float myClose;
-
-	// adjusted close - the adjusted closing value during an increment
-	float myAdjusted;
-
-	// volume - the total trade volume of an increment
-	int myVolume;
-
-	// increment - the increment being represented in this object (Y/M/w/d/h/m/s)
-	char myIncrement;
-
-	// initComplete - a boolean value indicating the completeness of the six fields
-	bool initComplete;
-
-private: // Private Methods
-
-	/*********************** SETTERS ***********************************/
-
-	// set Date //
+    
+    // A Date Engine, used for the manipulate of dates
+    DateEngine* myDatenumEngine;
+    
+    // String format of input/output string
+    std::string myInputFormat;
+    std::string myDisplayFormat;
+    
+    // Last looked up items, this is to save time and resources
+    typename std::map<double, Price>::iterator lastIter;
+    double lastDatenum;
+    std::string lastDateStr;
+    
+private: // Private methods
+    
+    // Fetch By String //
 	/*--------------------------------------------------------------
-	 * Description - sets the dateNum value for a time increment
-	 * Input(s):
-	 *   double - a value for a date with fixed start point (epoch)
-	 *	   format: day.fractionalDay.
-	 *	   smallest increment is 1 second ( 1.1574e-5)
-     * Output(s):
-     *   void
-	 ---------------------------------------------------------------*/
-    void setDate(double dateNumber);    
-
-	// setHigh //
-	/*--------------------------------------------------------------
-	 * Description - sets the highest price during a time increment
-	 * Input(s):
-	 *   float - a value of the highest price during an increment
-     * Output(s):
-     *   void
-	 ---------------------------------------------------------------*/
-	void setHigh(float highPrice);
-
-	// setLow //
-	/*--------------------------------------------------------------
-	 * Description - sets the lowest price of a time increment
-	 * Input(s):
-	 *   float - a value of the lowest price during an increment
-     * Output(s):
-     *   void
-	 ---------------------------------------------------------------*/
-	void setLow(float lowPrice);
-
-	// setOpen //
-	/*--------------------------------------------------------------
-	 * Description - sets the open price of a time increment
-	 * Input(s):
-	 *   float - a value of the opening price during an increment
-     * Output(s):
-     *   void
-	 ---------------------------------------------------------------*/
-	void setOpen(float openPrice);
-
-	// setClose //
-	/*--------------------------------------------------------------
-	 * Description - sets the closing price of a time increment
-	 * Input(s):
-	 *   float - a value of the closing price during an increment
-     * Output(s):
-     *   void
-	---------------------------------------------------------------*/
-	void setClose(float closePrice);
-
-	// setAdjusted //
-	/*--------------------------------------------------------------
-	 * Description - sets the adjusted closing price of a time increment
-	 * Input(s):
-	 *   float - a value of the closing price during an increment
-     * Output(s):
-     *   void
-	 ---------------------------------------------------------------*/
-	void setAdjusted(float adjustedPrice);
-
-	// setVolume //
-	/*--------------------------------------------------------------
-	 * Description - sets the total trade volume during a time increment
-	 * Input(s):
-	 *   int - a value of total trade volume
-     * Output(s):
-     *   void
-	 ---------------------------------------------------------------*/
-	void setVolume(int volume);
-
-	// setIncrement //
-	/*--------------------------------------------------------------
-	 * Description - stores the value of the increment type for the object
-	 * Input(s):
-	 *   char - an increment in (Y/M/w/d/h/m/s)
-     * Output(s):
-     *   void
-	 ---------------------------------------------------------------*/
-	void setIncrement(char increment);
-
-	/*********************** Validation *********************************/
-
-	// goodDateNum //
-	/*--------------------------------------------------------------
-	 * Description - checks that the dateNumber is valid.  
-	 *	Primarily, this checks for negative values
+	 * Description - looks up the iter of the price unit associated 
+     *   with the date string provided.  If nothing exists, then stores
+     *   the end iter in lastIter.
      * Input(s):
-     * double - a value for a date with fixed start point (epoch)
-	 *	 format: day.fractionalDay.
-	 *	 smallest increment is 1 second ( 1.1574e-5)
-	 * Output(s): 
-	 *   bool - a true of false to the statement, "This 'thing' is valid"
-	 ---------------------------------------------------------------*/
-	bool goodDatenum(double dateNumber);
-
-	// goodPrice //
-	/*--------------------------------------------------------------
-	 * Description - checks that the prive value given is valid.
-	 *	Primarily, this checks for negative values
-     * Input(s):
-     *   float - a value of the price to validate
+     *   string - the date string associated with the increment.  This
+     *     should be of the same format used to program the Container
 	 * Output(s):
-	 *   bool - a true of false to the statement, "This 'thing' is valid"
-     ---------------------------------------------------------------*/
-	bool goodPrice(float price);
-
-	// goodVolume //
+	 *   void
+	 ---------------------------------------------------------------*/
+    void fetchByString(std::string dateStr);
+    
+    // Fetch By String //
 	/*--------------------------------------------------------------
-	 * Description - checks that the volume is valid.  Primarily checks
-	 *	that the value is positive
+	 * Description - looks up the iter of the price unit associated 
+     *   with the date number provided.  If nothing exists, then stores
+     *   the end iter in lastIter.
 	 * Input(s):
-     *   int - a value of total trade volume
+	 *   double - a datenum for the increment
 	 * Output(s):
-	 *   bool - a true of false to the statement, "This 'thing' is valid"
+	 *   void
 	 ---------------------------------------------------------------*/
-	bool goodVolume(int volume);
-
-	// goodIncrement //
-	/*--------------------------------------------------------------
-	 * Description - checks that the Increment given is valid.
-	 *	Primarily, this checks is input in the set (Y/M/w/d/h/m/s)
-     * Input(s):
-     *   char - an increment in (Y/M/w/d/h/m/s)
-	 * Output(s):
-	 *   bool - a true of false to the statement, "This 'thing' is valid"
-	 ---------------------------------------------------------------*/
-	bool goodIncrement(char increment);
-
-	// goodObject //
-	/*--------------------------------------------------------------
-	 * Description - checks that the object is wholly valid.
-     * Inputs(s):
-     *   void
-	 * Output(s):
-	 *   bool - a true of false to the statement, "This 'thing' is valid"
-	 ---------------------------------------------------------------*/
-	bool goodObject();
-
+    void fetchByNumber(double datenum);
 };
 
 #endif

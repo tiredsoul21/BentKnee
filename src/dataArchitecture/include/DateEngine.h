@@ -4,8 +4,8 @@
 * owned by other classes, and as used as an engine.
 */
 
-#ifndef DATENUM_H
-#define DATENUM_H
+#ifndef DATEENGINE_H
+#define DATEENGINE_H
 
 #ifndef CLASSTEMPLATE_H
 #include "ClassTemplate.h"
@@ -14,7 +14,7 @@
 #include <string>
 #include <map>
 
-class Datenum : public ClassTemplate
+class DateEngine : public ClassTemplate
 {
 public: // Public Members
 
@@ -23,18 +23,18 @@ public: // Public Methods
     /*********************** CONSTRUCTORS ******************************/
 
     // Default Constructor //
-    Datenum();
+    DateEngine();
 
     // Date String Constructor //
-    Datenum(std::string dateString, std::string dateFormat);
+    DateEngine(std::string dateString, std::string dateFormat);
 
     // Date double Constructor //
-    Datenum(double datenum);
+    DateEngine(double datenum);
 
     /*********************** DESTRUCTORS *******************************/
 
     // Default Destructor //
-    ~Datenum();
+    ~DateEngine();
 
     /************************** SETTERS ********************************/
 
