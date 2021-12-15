@@ -14,7 +14,6 @@
 #endif
 
 #include <string>
-#include <vector>
 
 class Price : public ClassTemplate
 {

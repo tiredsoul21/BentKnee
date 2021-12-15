@@ -61,7 +61,7 @@ public: // Public Methods
      *   string - a format that contains the format the output string
 	 *		   that is desired.  Use (Y / M / D / h / m / s)
      --------------------------------------------------------------*/
-    void setInputDateFormat(std::string dateFormat);
+    void setInputDateFormat(std::string* dateFormat);
 
     // set Display Date Format //
     /*--------------------------------------------------------------
@@ -71,7 +71,7 @@ public: // Public Methods
      *   string - a format that contains the format the output string
 	 *		   that is desired.  Use (Y / M / D / h / m / s)
      --------------------------------------------------------------*/
-    void setDisplayDateFormat(std::string dateFormat);
+    void setDisplayDateFormat(std::string* dateFormat);
     
 	/*********************** GETTERS ***********************************/
     
@@ -88,23 +88,8 @@ public: // Public Methods
 	 *   map<double, Price>::iterator - iterator for the data 
      *   point if there is a match
 	 ---------------------------------------------------------------*/
-	typename std::map<double, Price>::iterator getIter(std::string dateStr);
-    typename std::map<double, Price>::iterator getIter(double datenum);
-    
-    	// Get Begin Iterator //
-	/*--------------------------------------------------------------
-	 * Description - get the iterator for a lookup value in History
-     *   from a str / double
-	 * Input(s) - Overload 1:
-	 *   double - a datenum for the increment
-     * Input(s) - Overload 2:
-     *   string - the date string associated with the increment.  This
-     *     should be of the same format used to program the Container
-	 * Output(s):
-	 *   map<double, Price>::iterator - iterator for the data 
-     *   point if there is a match
-	 ---------------------------------------------------------------*/
-	typename std::map<double, Price>::iterator getBeginIter();
+	std::map<double, Price>::iterator getIter(std::string* dateStr);
+    std::map<double, Price>::iterator getIter(double datenum);
     
 	// Get Date Number //
 	/*--------------------------------------------------------------
@@ -119,8 +104,8 @@ public: // Public Methods
 	 *	  format: day.fractionalDay.
 	 *	  smallest increment is 1 second ( 1.1574-5)
 	 ---------------------------------------------------------------*/
-	double getDatenum(std::string date);
-    double getDatenum(typename std::map<double, Price>::iterator it);
+	double getDatenum(std::string* date);
+    double getDatenum(std::map<double, Price>::iterator it);
 
 	// Get Date String //
 	/*--------------------------------------------------------------
@@ -133,7 +118,7 @@ public: // Public Methods
 	 *   string - A date and/or time string containing increments value
 	 ---------------------------------------------------------------*/
 	std::string getDateStr(double date);
-	std::string getDateStr(typename std::map<double, Price>::iterator it);
+	std::string getDateStr(std::map<double, Price>::iterator it);
 
 	// Free Format Datenum String //
 	/*--------------------------------------------------------------
@@ -151,8 +136,8 @@ public: // Public Methods
 	 *   string - representing the time frame of an increment
 	 ---------------------------------------------------------------*/
 	std::string getCustomDateString(double dateNum);
-	std::string getCustomDateString(std::string dateString);
-    std::string getCustomDateString(typename std::map<double, Price>::iterator it);
+	std::string getCustomDateString(std::string* dateString);
+    std::string getCustomDateString(std::map<double, Price>::iterator it);
 
 	// Get High //
 	/*--------------------------------------------------------------
@@ -168,8 +153,8 @@ public: // Public Methods
 	 *   float - a value of the highest price during an increment
 	 ---------------------------------------------------------------*/
 	float getHigh(double date);
-	float getHigh(std::string dateString);
-	float getHigh(typename std::map<double, Price>::iterator it);
+	float getHigh(std::string* dateString);
+	float getHigh(std::map<double, Price>::iterator it);
 
 	// Get Low //
 	/*--------------------------------------------------------------
@@ -185,8 +170,8 @@ public: // Public Methods
 	 *   float - a value of the lowest price during an increment
 	 ---------------------------------------------------------------*/
 	float getLow(double date);
-	float getLow(std::string dateString);
-	float getLow(typename std::map<double, Price>::iterator it);
+	float getLow(std::string* dateString);
+	float getLow(std::map<double, Price>::iterator it);
 
 	// Get Open //
 	/*--------------------------------------------------------------
@@ -202,8 +187,8 @@ public: // Public Methods
 	 *   float - a value of the opening price during an increment
 	 ---------------------------------------------------------------*/
 	float getOpen(double date);
-	float getOpen(std::string dateString);
-	float getOpen(typename std::map<double, Price>::iterator it);
+	float getOpen(std::string* dateString);
+	float getOpen(std::map<double, Price>::iterator it);
 
 	// Get Close //
 	/*--------------------------------------------------------------
@@ -219,8 +204,8 @@ public: // Public Methods
 	*   float - a value of the closing price during an increment
 	---------------------------------------------------------------*/
 	float getClose(double date);
-	float getClose(std::string dateString);
-	float getClose(typename std::map<double, Price>::iterator it);
+	float getClose(std::string* dateString);
+	float getClose(std::map<double, Price>::iterator it);
 
 	// Get Close (Adjusted) //
 	/*--------------------------------------------------------------
@@ -236,8 +221,8 @@ public: // Public Methods
 	 *   float - a value of the adjusted closing price during an increment
 	 ---------------------------------------------------------------*/
 	float getAdjusted(double date);
-	float getAdjusted(std::string dateString);
-	float getAdjusted(typename std::map<double, Price>::iterator it);
+	float getAdjusted(std::string* dateString);
+	float getAdjusted(std::map<double, Price>::iterator it);
 
 	// Get Volume //
 	/*--------------------------------------------------------------
@@ -253,8 +238,8 @@ public: // Public Methods
 	 *   int - an value representing total trade volume
 	 ---------------------------------------------------------------*/
 	int getVolume(double date);
-	int getVolume(std::string dateString);
-	int getVolume(typename std::map<double, Price>::iterator it);
+	int getVolume(std::string* dateString);
+	int getVolume(std::map<double, Price>::iterator it);
 
 	// Get Increment //
 	/*--------------------------------------------------------------
@@ -270,8 +255,8 @@ public: // Public Methods
 	 *   char - a char in (Y/M/w/d/h/m/s)
 	 ---------------------------------------------------------------*/
 	char getIncrement(double date);
-	char getIncrement(std::string dateString);
-	char getIncrement(typename std::map<double, Price>::iterator it);
+	char getIncrement(std::string* dateString);
+	char getIncrement(std::map<double, Price>::iterator it);
 
     /********************* Functional *********************************/
     
@@ -335,7 +320,7 @@ public: // Public Methods
 	 *   bool - a success bool for having added, true = added
 	 *	increment
 	 ---------------------------------------------------------------*/
-	bool add(std::string dateString, float openPrice, float closePrice, 
+	bool add(std::string* dateString, float openPrice, float closePrice, 
 		     float highPrice, float lowPrice, float adjustedPrice,
 		     int totalVol, char incSize);
     
@@ -349,8 +334,6 @@ private: // Private Members
     std::string myDisplayFormat;
     
     // Last looked up items, this is to save time and resources
-    typename std::map<double, Price>::iterator lastIter;
-    double lastDatenum;
     std::string lastDateStr;
     
 private: // Private methods
@@ -366,7 +349,7 @@ private: // Private methods
 	 * Output(s):
 	 *   void
 	 ---------------------------------------------------------------*/
-    void fetchByString(std::string dateStr);
+    void fetchByString(std::string* dateStr);
     
     // Fetch By String //
 	/*--------------------------------------------------------------
