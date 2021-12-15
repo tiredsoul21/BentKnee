@@ -32,7 +32,7 @@ public: // Public Methods
 	 *   map<double, Price>::iterator - iterator for the data 
      *   point if there is a match
 	 ---------------------------------------------------------------*/
-	std::map<double, Price>::iterator getBeginIter()
+	typename std::map<double, T>::iterator getBeginIter()
     {
         return myDataMap.begin();
     }
