@@ -41,24 +41,20 @@ namespace TypeDefinitions {
     // TD Period Type Map //
     /*--------------------------------------------------------------
     * Description - takes and enumerated value and returns the string
-    *
-    * Output(s):
-    *   string - representing the enumeration desired
-    *
     * Input(s):
     *   TD_PeriodType - an enumeration of periods accepted by TD
+    * Output(s):
+    *   string - representing the enumeration desired
     ---------------------------------------------------------------*/
     std::string periodTypeMap(TD_PeriodType);
 
-    // TD Period Type Map //
+    // Frequency Type Map //
     /*--------------------------------------------------------------
     * Description - takes and enumerated value and returns the string
-    *
-    * Output(s):
-    *   string - representing the enumeration desired
-    *
     * Input(s):
     *   TD_FrequencyType - an enumeration of frequencies accepted by TD
+    * Output(s):
+    *   string - representing the enumeration desired
     ---------------------------------------------------------------*/
     std::string frequencyTypeMap(TD_FrequencyType);
 }

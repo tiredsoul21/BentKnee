@@ -1,8 +1,9 @@
-/*This class is intended to be a utility class.  Typical 
-* utility would be the the conversion and translation of datenums
-* and strings with multiple overloaded functionality.  This is 
-* owned by other classes, and as used as an engine.
-*/
+/*
+ * This class is intended to be a utility class.  Typical 
+ * utility would be the the conversion and translation of datenums
+ * and strings with multiple overloaded functionality.  This is 
+ * owned by other classes, and as used as an engine.
+ */
 
 #ifndef DATEENGINE_H
 #define DATEENGINE_H
@@ -26,7 +27,7 @@ public: // Public Methods
     DateEngine();
 
     // Date String Constructor //
-    DateEngine(std::string dateString, std::string dateFormat);
+    DateEngine(std::string* dateString, std::string* dateFormat);
 
     // Date double Constructor //
     DateEngine(double datenum);
@@ -50,7 +51,7 @@ public: // Public Methods
      * Output(s):
      *   Void
      ---------------------------------------------------------------*/
-    bool setDateFormat(std::string dateFormat);
+    bool setDateFormat(std::string* dateFormat);
 
     // Set Datenum //
     /*--------------------------------------------------------------
@@ -84,7 +85,7 @@ public: // Public Methods
      * Output(s):
      *   Void
      ---------------------------------------------------------------*/
-    void setDateString(std::string dateString);
+    void setDateString(std::string* dateString);
 
     /************************** GETTERS ********************************/
 
@@ -324,7 +325,7 @@ private: // Private Methods
      * Input(s):
      *   string - date format in: (YMDhms:/)
      ---------------------------------------------------------------*/
-    bool validFormat(std::string givenFormat);
+    bool validFormat(std::string* givenFormat);
 
     // Valid Date //
     /*--------------------------------------------------------------
@@ -336,7 +337,7 @@ private: // Private Methods
     * Output(s):
     *   bool - true = valid format :: false = invalid format
     ---------------------------------------------------------------*/
-    bool validDate(std::string givenDate,  std::string givenFormat);
+    bool validDate(std::string* givenDate,  std::string givenFormat);
 };
 
 #endif

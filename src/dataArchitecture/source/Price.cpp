@@ -1,5 +1,6 @@
-#include <iostream>
+#ifndef PRICE_H
 #include "Price.h"
+#endif
 
 /*********************** CONSTRUCTORS ******************************/
 
@@ -70,7 +71,10 @@ void Price::setHigh(float highPrice)
 	if ( goodPrice(highPrice) )
 		this->myHigh = highPrice;
 	else
+    {
 		this->myHigh = -1;
+        myErrorString += "Price::setHigh - bad price: " + std::to_string(highPrice) + "\n";
+    }
 }
 
 // setLow //
@@ -78,8 +82,12 @@ void Price::setLow(float lowPrice)
 {
 	if ( goodPrice(lowPrice) )
 		this->myLow = lowPrice;
+
 	else
+    {
 		this->myLow = -1;
+        myErrorString += "Price::setLow - bad price: " + std::to_string(lowPrice) + "\n";
+    }
 }
 
 // setOpen //
@@ -88,7 +96,10 @@ void Price::setOpen(float openPrice)
 	if ( goodPrice(openPrice) )
 		this->myOpen = openPrice;
 	else
+    {
 		this->myOpen = -1;
+        myErrorString += "Price::setOpen - bad price: " + std::to_string(openPrice) + "\n";
+    }
 }
 
 // setClose //
@@ -97,7 +108,10 @@ void Price::setClose(float closePrice)
 	if ( goodPrice(closePrice) )
 		this->myClose = closePrice;
 	else
+    {
 		this->myClose = -1;
+        myErrorString += "Price::setClose - bad price: " + std::to_string(closePrice) + "\n";
+    }
 }
 
 // setAdjusted //
@@ -106,7 +120,10 @@ void Price::setAdjusted(float adjustedPrice)
 	if (goodPrice(adjustedPrice))
 		this->myAdjusted = adjustedPrice;
 	else
+    {
 		this->myAdjusted = -1;
+        myErrorString += "Price::setAdjusted - bad price: " + std::to_string(adjustedPrice) + "\n";
+    }
 }
 
 // setVolume //
@@ -115,7 +132,10 @@ void Price::setVolume(int totalVol)
 	if (goodVolume(totalVol))
 		this->myVolume = totalVol;
 	else
+    {
 		this->myVolume = -1;
+        myErrorString += "Price::setVolume - bad volume: " + std::to_string(totalVol) + "\n";
+    }
 }
 
 // setIncrement //
@@ -124,7 +144,11 @@ void Price::setIncrement(char increment)
 	if ( goodIncrement(increment) )
 		this->myIncrement = increment;
 	else
+    {
 		this->myIncrement = '\0';
+        myErrorString += "Price::setIncrement - bad increment: ";
+        myErrorString += increment + "\n";
+    }
 }
 
 /*********************** GETTERS ***********************************/
@@ -261,40 +285,19 @@ bool Price::goodIncrement(char increment)
 bool Price::goodObject()
 {
 	if (this->myDatenum == -1)
-	{
-		myErrorString += "Initialization failed: datenum found negative.\n";
 		return false;
-	}
 	else if (this->myClose == -1)
-	{
-		myErrorString += "Initialization failed: closing price found negative.  (" + std::to_string(this->myClose) + ")\n";
 		return false;
-	}
 	else if (this->myOpen == -1)
-	{
-		myErrorString += "Initialization failed: opening price found negative.  (" + std::to_string(this->myOpen) + ")\n";
 		return false;
-	}
 	else if (this->myHigh == -1)
-	{
-		myErrorString += "Initialization failed: high price found negative.  (" + std::to_string(this->myHigh) + ")\n";
 		return false;
-	}
 	else if (this->myLow == -1)
-	{
-		myErrorString += "Initialization failed: low price found negative.  (" + std::to_string(this->myLow) + ")\n";
 		return false;
-	}
 	else if (this->myVolume == -1)
-	{
-		myErrorString += "Initialization failed: volume found negative.  (" + std::to_string(this->myVolume) + ")\n";
 		return false;
-	}
 	else if (this->myIncrement == '\0')
-	{
-		myErrorString += "Initialization failed: invalid increment.  Use (Y/M/w/d/h/m/s).  (" + std::to_string(this->myIncrement) + ")\n";
 		return false;
-	}
 
 	return true;
 }

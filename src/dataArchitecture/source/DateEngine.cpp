@@ -1,6 +1,6 @@
+#ifndef DATEENGINE_H
 #include "DateEngine.h"
-
-#include <iostream>
+#endif
 
 /*********************** CONSTRUCTORS ******************************/
 
@@ -31,7 +31,7 @@ DateEngine::DateEngine()
 }
 
 // Datenum(string, string) //
-DateEngine::DateEngine(std::string dateString, std::string dateFormat) : DateEngine()
+DateEngine::DateEngine(std::string* dateString, std::string* dateFormat) : DateEngine()
 {
     // We're going validate the format, then the string 
     setDateFormat(dateFormat);
@@ -55,23 +55,21 @@ DateEngine::~DateEngine(){ }
 /************************** SETTERS ********************************/
 
 // setDateFormat //
-bool DateEngine::setDateFormat(std::string dateFormat)
+bool DateEngine::setDateFormat(std::string* dateFormat)
 {
     if (validFormat(dateFormat))
     {
-        if (dateFormat.compare(this->myFormat))
+        if (dateFormat->compare(this->myFormat))
         {
-            this->myFormat = dateFormat;
+            this->myFormat = *dateFormat;
             myFormatChange = true;
             writeDateString();
         }
         return true;
     }
-    else
-    {
-        return false;
-        // There is nothing to do here, error added by valid function
-    }
+
+    // There is nothing to do here, error added by valid function
+    return false;
 }
 
 // setDatenum //
@@ -88,26 +86,23 @@ void DateEngine::setDatenum(double datenum)
     }
     else
     {
-        this->myErrorString += "Failed to load date data, bad datenum given < 0\n";
+        this->myErrorString += "DateEngine::setDatenum - Failed to load date data, bad datenum given < 0\n";
     }
 }
 
 // setDateString //
-void DateEngine::setDateString(std::string dateString)
+void DateEngine::setDateString(std::string* dateString)
 {
     // We're going validate the format, then the string 
     if (validDate(dateString, myFormat) )
     {
-        if (dateString.compare(this->myDateStr))
+        if (dateString->compare(this->myDateStr))
         {
-            myDateStr = dateString;
+            myDateStr = *dateString;
             readDateString();
         }
     }
-    else
-    {
-        // Nothing to do here, error handling done in valid*
-    }
+    // Nothing to do here, error handling done in valid*
 }
 
 /************************** GETTERS ********************************/
@@ -400,10 +395,6 @@ void DateEngine::writeDateString()
                 else
                     daysThisMonth = 28;
             }
-            else
-            {
-                // Nothing to do here, the rest have 31, and we already set that
-            }
 
             if ((int)localDatenum > daysThisMonth)
             {
@@ -536,7 +527,7 @@ bool DateEngine::isLeapyear(int givenYear)
 }
 
 // validFormat //
-bool DateEngine::validFormat(std::string givenFormat)
+bool DateEngine::validFormat(std::string* givenFormat)
 {
     // Count format tokens for date
     int yearCount = 0;      // must be 2 or 4
@@ -558,27 +549,26 @@ bool DateEngine::validFormat(std::string givenFormat)
     std::string localString = "";
 
     // Check String length
-    if (givenFormat.length() == 0)
+    if (givenFormat->length() == 0)
     {
-        myErrorString += "No date format given!\n";
+        myErrorString += "DateEngine::validFormat - No date format given!\n";
         return false;
     }
 
     // Looping through the provided format
     std::string validChars = "YDMhms:/ -";
-    for (unsigned int i = 0; i < givenFormat.length(); ++i)
+    for (unsigned int i = 0; i < givenFormat->length(); ++i)
     {
         // We are going to double loop through the strings and make sure
         //   the givenFormat is in the set of expected characters
-        if (validChars.find(givenFormat[i], 0) == std::string::npos)
+        if (validChars.find((*givenFormat)[i], 0) == std::string::npos)
         {
             // This char is not in the valid charset
-            localString += "Error: Character: '";
-            localString += givenFormat[i];
-            localString += "' not a valid character.\n";
+            localString += "DateEngine::validFormat - Error: Character: '";
+            localString += (*givenFormat)[i] + "' not a valid character.\n";
         }
 
-        if (activeChar != givenFormat[i])
+        if (activeChar != (*givenFormat)[i])
         {
             // Entering the if below means we're leaving that format, mark as complete (true)
             if (activeChar == 'Y')
@@ -595,63 +585,63 @@ bool DateEngine::validFormat(std::string givenFormat)
                 secondFlag = true;
 
             // Update the active char
-            activeChar = givenFormat[i];
+            activeChar = (*givenFormat)[i];
         }
 
         // Count token characters
-        if (givenFormat[i] == 'Y' && !yearFlag)
+        char thisChar = (*givenFormat)[i];
+        if (thisChar == 'Y' && !yearFlag)
             yearCount++;
-        else if (givenFormat[i] == 'M' && !monthFlag)
+        else if (thisChar == 'M' && !monthFlag)
             monthCount++;
-        else if (givenFormat[i] == 'D' && !dayFlag)
+        else if (thisChar == 'D' && !dayFlag)
             dayCount++;
-        else if (givenFormat[i] == 'h' && !hourFlag)
+        else if (thisChar == 'h' && !hourFlag)
             hourCount++;
-        else if (givenFormat[i] == 'm' && !minuteFlag)
+        else if (thisChar == 'm' && !minuteFlag)
             minuteCount++;
-        else if (givenFormat[i] == 's' && !secondFlag)
+        else if (thisChar == 's' && !secondFlag)
             secondCount++;
         // If we made it here, the char is valid, but the flag was hit
         // Meaning date format fragmentation was found
-        else if (givenFormat[i] == 'Y' && yearFlag)
-            localString += "Error: Date fragmentation occurred for: Y\n";
-        else if (givenFormat[i] == 'M' && monthFlag)
-            localString += "Error: Date fragmentation occurred for: M\n";
-        else if (givenFormat[i] == 'D' && dayFlag)
-            localString += "Error: Date fragmentation occurred for: D\n";
-        else if (givenFormat[i] == 'h' && hourFlag)
-            localString += "Error: Date fragmentation occurred for: h\n";
-        else if (givenFormat[i] == 'm' && minuteFlag)
-            localString += "Error: Date fragmentation occurred for: m\n";
-        else if (givenFormat[i] == 's' && secondFlag)
-            localString += "Error: Date fragmentation occurred for: s\n";
+        else if (thisChar == 'Y' && yearFlag)
+            localString += "DateEngine::validFormat - Error: Date fragmentation occurred for: Y\n";
+        else if (thisChar == 'M' && monthFlag)
+            localString += "DateEngine::validFormat - Error: Date fragmentation occurred for: M\n";
+        else if (thisChar == 'D' && dayFlag)
+            localString += "DateEngine::validFormat - Error: Date fragmentation occurred for: D\n";
+        else if (thisChar == 'h' && hourFlag)
+            localString += "DateEngine::validFormat - Error: Date fragmentation occurred for: h\n";
+        else if (thisChar == 'm' && minuteFlag)
+            localString += "DateEngine::validFormat - Error: Date fragmentation occurred for: m\n";
+        else if (thisChar == 's' && secondFlag)
+            localString += "DateEngine::validFormat - Error: Date fragmentation occurred for: s\n";
     }
 
     // Validate token counts 
     if (yearCount != 4 && yearCount != 2)
-        localString += "Error: Year format incorrect, expected YY or YYYY\n";
+        localString += "DateEngine::validFormat - Error: Year format incorrect, expected YY or YYYY\n";
 
     if (monthCount != 2)
-        localString += "Error: Month format incorrect, expected MM\n";
+        localString += "DateEngine::validFormat - Error: Month format incorrect, expected MM\n";
 
     if (dayCount != 2)
-        localString += "Error: Day format incorrect, expected DD\n";
+        localString += "DateEngine::validFormat - Error: Day format incorrect, expected DD\n";
 
     if (hourCount != 2 )
-        localString += "Error: Hour format incorrect, expected hh\n";
+        localString += "DateEngine::validFormat - Error: Hour format incorrect, expected hh\n";
 
     if (minuteCount != 2)
-        localString += "Error: Minute format incorrect, expected mm\n";
+        localString += "DateEngine::validFormat - Error: Minute format incorrect, expected mm\n";
 
     if (secondCount != 2)
-        localString += "Error: Second format incorrect, expected ss\n";
+        localString += "DateEngine::validFormat - Error: Second format incorrect, expected ss\n";
 
     // We make sure there is at LEAST one data element
     //   That is, the user didn't send a string with only ' ', '/', or ':'
     if (yearCount + monthCount + dayCount + hourCount + minuteCount + secondCount == 0)
     {
-        localString += "Error: string: '";
-        localString += givenFormat;
+        localString += "DateEngine::validFormat - Error: string: '" + *givenFormat;
         localString += "' contains no data elements (YMDhms).\n";
     }
 
@@ -668,7 +658,7 @@ bool DateEngine::validFormat(std::string givenFormat)
 }
 
 // validDate //
-bool DateEngine::validDate(std::string givenDate, std::string givenFormat)
+bool DateEngine::validDate(std::string* givenDate, std::string givenFormat)
 {
     int testYear = -1;
     int testMonth = -1;
@@ -681,9 +671,9 @@ bool DateEngine::validDate(std::string givenDate, std::string givenFormat)
     std::string localString = "";
 
     // check string length
-    if (givenFormat.length() != givenDate.length())
+    if (givenFormat.length() != givenDate->length())
     {
-        myErrorString += "Error: date string inconsistent in length with format.\n";
+        myErrorString += "DateEngine::validDate - Error: date string inconsistent in length with format.\n";
         return false;
     }
 
@@ -696,49 +686,49 @@ bool DateEngine::validDate(std::string givenDate, std::string givenFormat)
             if (givenFormat[i] == 'Y')
             {
                 if (myYearSize == 4)
-                    testYear = std::stoi(givenDate.substr(i, 4));
+                    testYear = std::stoi(givenDate->substr(i, 4));
 
                 if (myYearSize == 2)
-                    testYear = std::stoi(givenDate.substr(i, 2));
+                    testYear = std::stoi(givenDate->substr(i, 2));
 
                 i = i + myYearSize - 1;
             }
             else if (givenFormat[i] == 'M')
             {
-                testMonth = std::stoi(givenDate.substr(i, 2));
+                testMonth = std::stoi(givenDate->substr(i, 2));
                 i++;
             }
             else if (givenFormat[i] == 'D')
             {
-                testDay = std::stoi(givenDate.substr(i, 2));
+                testDay = std::stoi(givenDate->substr(i, 2));
                 i++;
             }
             else if (givenFormat[i] == 'h')
             {
-                testHour = std::stoi(givenDate.substr(i, 2));
+                testHour = std::stoi(givenDate->substr(i, 2));
                 i++;
             }
             else if (givenFormat[i] == 'm')
             {
-                testMinute = std::stoi(givenDate.substr(i, 2));
+                testMinute = std::stoi(givenDate->substr(i, 2));
                 i++;
             }
             else if (givenFormat[i] == 's')
             {
-                testSecond = std::stoi(givenDate.substr(i, 2));
+                testSecond = std::stoi(givenDate->substr(i, 2));
                 i++;
             }
             // If it's none of the above, it must be a special character
-            else if (givenFormat[i] != givenDate[i])
+            else if (givenFormat[i] != (*givenDate)[i])
             {
                 localString += "Error: Invalid special character used in date string: '";
-                localString += givenDate[i];
+                localString += (*givenDate)[i];
                 localString += "'\n";
             }
         }
         catch (...)
         {
-            localString += "Failed to parse string: String to number.  Check format\n";
+            localString += "DateEngine::validDate - Failed to parse string: String to number.  Check format\n";
             return false;
         }
     }
@@ -747,93 +737,66 @@ bool DateEngine::validDate(std::string givenDate, std::string givenFormat)
     if (testYear != -1 && myYearSize == 4)
     {
         if (testYear < 1970 || testYear > 2039)
-        {
-            localString += "Year exceeds internal year limit: 1970-2039.\n";
-        }
+            localString += "DateEngine::validDate - Year exceeds internal year limit: 1970-2039.\n";
     }
     else if (testYear != -1 && myYearSize == 2)
     {
         if (testYear < 70 && testYear > 39)
-        {
-            localString += "Year exceeds internal year limit: 1970-2039.\n";
-        }
+            localString += "DateEngine::validDate - Year exceeds internal year limit: 1970-2039.\n";
     }
 
     // Validate month
     if (testMonth != -1 && (testMonth < 1 || testMonth > 12))
-    {
-        localString += "Month exceeds limit: 1-12.\n";
-    }
+        localString += "DateEngine::validDate - Month exceeds limit: 1-12.\n";
 
     // Validate day 4,6,9,11
     if (testMonth == 4 || testMonth == 6 || testMonth == 9 || testMonth == 11)
     {
         if (testDay > 30 || testDay < 0)
-        {
-            localString += "Day exceeds limit: 1-30.\n";
-        }
+            localString += "DateEngine::validDate - Day exceeds limit: 1-30.\n";
     }
     else if (testMonth == 1 || testMonth == 3 || testMonth == 5 || testMonth == 7 ||
              testMonth == 8 || testMonth == 10 || testMonth == 12)
     {
         if (testDay > 31 || testDay < 0)
-        {
-            localString += "Day exceeds limit: 1-31.\n";
-        }
+            localString += "DateEngine::validDate - Day exceeds limit: 1-31.\n";
     }
     else if (testMonth == 2)
     {
         // Default: if year not passed, is to assume non-leap year
         bool leapYear = false;
         if (testYear > 70 && testYear < 101)
-        {
             leapYear = isLeapyear(testYear + 1900);
-        }
         else if (testYear >= 0 && testYear < 40)
-        {
             leapYear = isLeapyear(testYear + 2000);
-        }
         else if (testYear >= 0)
-        {
             leapYear = isLeapyear(testYear);
-        }
+
         if (leapYear)
         {
             if (testDay > 29 || testDay < 0)
-            {
-                localString += "Day exceeds limit: 1-29.\n";
-            }
+                localString += "DateEngine::validDate - Day exceeds limit: 1-29.\n";
         }
         else
         {
             if (testDay != -1 && testYear == -1)
-            {
-                localString += "Day exceeds limit (ambiguous year): 1-28.\n";
-            }
+                localString += "DateEngine::validDate - Day exceeds limit (ambiguous year): 1-28.\n";
             else if (testDay != -1 && (testDay > 28 || testDay < 0) )
-            {
-                localString += "Day exceeds limit: 1-28.\n";
-            }
+                localString += "DateEngine::validDate - Day exceeds limit: 1-28.\n";
         }
     }
 
     // Validate hours
     if (testHour != -1 && testHour < 0 && testHour > 23)
-    {
-        localString += "Hour exceeds limit: 0-23.\n";
-    }    
-    
+        localString += "DateEngine::validDate - Hour exceeds limit: 0-23.\n";
+
     // Validate minutes
     if (testMinute != -1 && testMinute < 0 && testMinute > 59)
-    {
-        localString += "Minutes exceeds limit: 0-59.\n";
-    }
+        localString += "DateEngine::validDate - Minutes exceeds limit: 0-59.\n";
 
     // Validate seconds
     if (testMinute != -1 && testSecond < 0 && testSecond > 59)
-    {
-        localString += "Seconds exceeds limit: 0-59.\n";
-    }
+        localString += "DateEngine::validDate - Seconds exceeds limit: 0-59.\n";
 
     if (localString.length() > 0)
     {
@@ -844,8 +807,8 @@ bool DateEngine::validDate(std::string givenDate, std::string givenFormat)
     return true;
 }
 
-// epochLongToDouble
-double DateEngine::epochLongToDouble(long  seconds)
+// epochLongToDouble //
+double DateEngine::epochLongToDouble(long seconds)
 {
     // Get rough estimate of double
     double doubleDatenum = seconds / 86400.0;
@@ -858,7 +821,7 @@ double DateEngine::epochLongToDouble(long  seconds)
     return doubleDatenum - leapSeconds / 86400.0;
 }
 
-// epochLongToDouble
+// epochDoubleToLong //
 long DateEngine::epochDoubleToLong(double day)
 {
     setDatenum(day);
@@ -866,6 +829,7 @@ long DateEngine::epochDoubleToLong(double day)
     return (long)(day * 86400 + leapSeconds);
 }
 
+// getLeapSecondsSince //
 int DateEngine::getLeapSecondsSince(int year, int month)
 {
     int loopYear = 1970;

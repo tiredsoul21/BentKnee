@@ -1,8 +1,5 @@
 /*
- * HelloWorld.cpp
- *
- *  Created on: Oct 21, 2021
- *      Author: derrick
+ * For now, this is used for testing and development of components.
  */
 
 #include <iostream>
@@ -17,22 +14,27 @@ void parseCSV(PriceContainer* container);
 
 int main()
 {
+    std::string inputFormat = "MMDDYYYY hhmmss";
+    std::string displayFormat = "YYYY-MM-DD";
+    std::string badDateStr1 = "02221985 000000";
+    std::string badDateStr2 = "02222050 000000";
+    std::string goodDateStr = "02222000 000000";
     std::cout << "Start-------------------" << std::endl;
     PriceContainer* container = new PriceContainer();
-    container->setInputDateFormat("MMDDYYYY hhmmss");
-    container->setDisplayDateFormat("YYYY-MM-DD");
+    container->setInputDateFormat(&inputFormat);
+    container->setDisplayDateFormat(&displayFormat);
     
     std::cout << "Parse-------------------" << std::endl;
     parseCSV(container);
     
     std::cout << "Report------------------" << std::endl;
-    auto iterBad = container->getIter("02221985 000000");
-    auto iterOne = container->getIter("02222000 000000");
+    auto iterBad = container->getIter(&badDateStr1);
+    auto iterOne = container->getIter(&goodDateStr);
     auto iterTwo = container->getIter(14463);
     auto iterThree = container->getBeginIter();
     
     // Testing bad sets of getIter
-    container->getIter("02222050 000000"); //bad
+    container->getIter(&badDateStr2); //bad
     container->getIter(1234432); //bad
     
     // Testing of Iter && getDatenum
@@ -40,14 +42,14 @@ int main()
     std::cout << container->getDatenum(iterOne) << "\n"; //good
     std::cout << container->getDatenum(iterTwo) << "\n";//good
     std::cout << container->getDatenum(iterThree) << "\n";//good
-    std::cout << container->getDatenum("02221985 000000") << std::endl; //bad
-    std::cout << container->getDatenum("02222010 000000") << std::endl; //good
+    std::cout << container->getDatenum(&badDateStr1) << std::endl; //bad
+    std::cout << container->getDatenum(&goodDateStr) << std::endl; //good
     std::cout << "-----------------------------------------\n";
     std::cout << container->getDateStr(14662) << std::endl; //good
     std::cout << container->getDateStr(iterOne) << std::endl; //good
     std::cout << "-----------------------------------------\n";
     std::cout << container->getCustomDateString(14662) << std::endl; //good
-    std::cout << container->getCustomDateString("02222000 000000") << std::endl; //good
+    std::cout << container->getCustomDateString(&goodDateStr) << std::endl; //good
     
     std::cout << "-----------------------------------------\n";
     std::cout << container->getLow(iterBad)<< std::endl; //bad
@@ -66,13 +68,13 @@ int main()
     std::cout << container->getVolume(iterOne) << std::endl; //good
     std::cout << container->getIncrement(iterOne) << std::endl; //good
     std::cout << "-----------------------------------------\n";
-    std::cout << container->getLow("02222000 000000") << std::endl; //good
-    std::cout << container->getHigh("02222000 000000") << std::endl; //good
-    std::cout << container->getOpen("02222000 000000") << std::endl; //good
-    std::cout << container->getClose("02222000 000000") << std::endl; //good
-    std::cout << container->getAdjusted("02222000 000000") << std::endl; //good
-    std::cout << container->getVolume("02222000 000000") << std::endl; //good
-    std::cout << container->getIncrement("02222000 000000") << std::endl; //good
+    std::cout << container->getLow(&goodDateStr) << std::endl; //good
+    std::cout << container->getHigh(&goodDateStr) << std::endl; //good
+    std::cout << container->getOpen(&goodDateStr) << std::endl; //good
+    std::cout << container->getClose(&goodDateStr) << std::endl; //good
+    std::cout << container->getAdjusted(&goodDateStr) << std::endl; //good
+    std::cout << container->getVolume(&goodDateStr) << std::endl; //good
+    std::cout << container->getIncrement(&goodDateStr) << std::endl; //good
     std::cout << "-----------------------------------------\n";
     std::cout << container->getLow(11009) << std::endl; //good
     std::cout << container->getHigh(11009) << std::endl; //good
@@ -128,7 +130,7 @@ void parseCSV(PriceContainer* container)
             float adjusted = std::stof(cell, &sz);
             std::getline(lineStream,cell,',');
             int volume = std::stoi(cell, &sz);
-            container->add(date, open, high, low, close, adjusted, volume, 'd');
+            container->add(&date, open, high, low, close, adjusted, volume, 'd');
         }
         isHeader = false;
     }
