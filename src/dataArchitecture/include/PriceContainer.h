@@ -237,9 +237,9 @@ public: // Public Methods
 	 * Output(s):
 	 *   int - an value representing total trade volume
 	 ---------------------------------------------------------------*/
-	int getVolume(double date);
-	int getVolume(std::string* dateString);
-	int getVolume(std::map<double, Price>::iterator it);
+	long getVolume(double date);
+	long getVolume(std::string* dateString);
+	long getVolume(std::map<double, Price>::iterator it);
 
 	// Get Increment //
 	/*--------------------------------------------------------------

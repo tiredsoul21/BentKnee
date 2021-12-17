@@ -47,7 +47,7 @@ public: // Public Methods
 	 ---------------------------------------------------------------*/
 	Price(double dateNumber, float openPrice, float closePrice, 
 		           float highPrice, float lowPrice, float adjustedPrice,
-		           int totalVol, char incSize);
+		           long totalVol, char incSize);
 
 	/*********************** DESTRUCTORS *******************************/
 
@@ -144,9 +144,9 @@ public: // Public Methods
      * Input(s):
      *   void
 	 * Output(s):
-	 *   int - an value representing total trade volume
+	 *   long - an value representing total trade volume
 	 ---------------------------------------------------------------*/
-	int getVolume();
+	long getVolume();
 
 	// getIncrement //
 	/*--------------------------------------------------------------
@@ -194,7 +194,7 @@ private: // Private Members
 	float myAdjusted;
 
 	// volume - the total trade volume of an increment
-	int myVolume;
+	long myVolume;
 
 	// increment - the increment being represented in this object (Y/M/w/d/h/m/s)
 	char myIncrement;
@@ -272,11 +272,11 @@ private: // Private Methods
 	/*--------------------------------------------------------------
 	 * Description - sets the total trade volume during a time increment
 	 * Input(s):
-	 *   int - a value of total trade volume
+	 *   long - a value of total trade volume
      * Output(s):
      *   void
 	 ---------------------------------------------------------------*/
-	void setVolume(int volume);
+	void setVolume(long volume);
 
 	// setIncrement //
 	/*--------------------------------------------------------------
@@ -319,11 +319,11 @@ private: // Private Methods
 	 * Description - checks that the volume is valid.  Primarily checks
 	 *	that the value is positive
 	 * Input(s):
-     *   int - a value of total trade volume
+     *   long - a value of total trade volume
 	 * Output(s):
 	 *   bool - a true of false to the statement, "This 'thing' is valid"
 	 ---------------------------------------------------------------*/
-	bool goodVolume(int volume);
+	bool goodVolume(long volume);
 
 	// goodIncrement //
 	/*--------------------------------------------------------------

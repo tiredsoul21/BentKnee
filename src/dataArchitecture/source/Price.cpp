@@ -22,7 +22,7 @@ Price::Price()
 Price::Price(double dateNumber, float openPrice, 
 	                           float closePrice, float highPrice, 
 	                           float lowPrice, float adjustedPrice,
-	                           int totalVol, char incSize) : Price()
+	                           long totalVol, char incSize) : Price()
 {
 	// Object initialized and contents validates
 	setDate(dateNumber);
@@ -127,7 +127,7 @@ void Price::setAdjusted(float adjustedPrice)
 }
 
 // setVolume //
-void Price::setVolume(int totalVol)
+void Price::setVolume(long totalVol)
 {
 	if (goodVolume(totalVol))
 		this->myVolume = totalVol;
@@ -196,7 +196,7 @@ float Price::getAdjusted()
 }
 
 // getVolume //
-int Price::getVolume()
+long Price::getVolume()
 {
 	return this->myVolume;
 }
@@ -253,7 +253,7 @@ bool Price::goodPrice(float price)
 }
 
 // goodVolume //
-bool Price::goodVolume(int totalVolume)
+bool Price::goodVolume(long totalVolume)
 {
 	//Checks if the volume given is positive
 	if (totalVolume < 0)

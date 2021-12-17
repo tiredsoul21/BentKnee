@@ -21,20 +21,30 @@ public: // Public Methods
 
     // Get Begin Iterator //
 	/*--------------------------------------------------------------
-	 * Description - get the iterator for a lookup value in History
-     *   from a str / double
-	 * Input(s) - Overload 1:
-	 *   double - a datenum for the increment
-     * Input(s) - Overload 2:
-     *   string - the date string associated with the increment.  This
-     *     should be of the same format used to program the Container
+	 * Description - get the iterator for beginnings of container
+	 * Input(s):
+	 *   void
 	 * Output(s):
 	 *   map<double, Price>::iterator - iterator for the data 
      *   point if there is a match
 	 ---------------------------------------------------------------*/
-	typename std::map<double, T>::iterator getBeginIter()
+	typename std::map<double, T>::iterator begin()
     {
         return myDataMap.begin();
+    }
+    
+    // Get End Iterator //
+	/*--------------------------------------------------------------
+	 * Description - get the iteratorfor end of container
+	 * Input(s):
+	 *   void
+	 * Output(s):
+	 *   map<double, Price>::iterator - iterator for the data 
+     *   point if there is a match
+	 ---------------------------------------------------------------*/
+	typename std::map<double, T>::iterator end()
+    {
+        return myDataMap.end();
     }
     
     	// Get Iterator //
