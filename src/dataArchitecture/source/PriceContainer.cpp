@@ -459,7 +459,7 @@ float PriceContainer::getAdjusted(std::map<double, Price>::iterator it)
 }
 
 // getVolume - Overload 1 //
-int PriceContainer::getVolume(double datenum)
+long PriceContainer::getVolume(double datenum)
 {
     // Lookup by date string if it exists in map
     fetchByNumber(datenum);
@@ -478,7 +478,7 @@ int PriceContainer::getVolume(double datenum)
 }
 
 // getVolume - Overload 2 //
-int PriceContainer::getVolume(std::string* dateStr)
+long PriceContainer::getVolume(std::string* dateStr)
 {
     // Lookup by date string if it exists in map
     fetchByString(dateStr);
@@ -497,7 +497,7 @@ int PriceContainer::getVolume(std::string* dateStr)
 }
 
 // getVolume - Overload 3 //
-int PriceContainer::getVolume(std::map<double, Price>::iterator it)
+long PriceContainer::getVolume(std::map<double, Price>::iterator it)
 {
     if (it ==  myDataMap.end())
     {

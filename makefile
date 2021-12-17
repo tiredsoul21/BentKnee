@@ -14,6 +14,7 @@ all: CloneHeaders \
 	Common \
 	Definitions \
 	DataArchitecture \
+	Technicals \
 	TestExec
 
 CloneHeaders:
@@ -40,6 +41,19 @@ Price: $(DATA_ARCH)/source/Price.cpp
 PriceContainer: $(DATA_ARCH)/source/PriceContainer.cpp
 	$(CC) -c $(DATA_ARCH)/source/PriceContainer.cpp -o build/PriceContainer.o -I build
 
+Technicals: ChaikinMoneyFlow
+	
+ChaikinMoneyFlow: ChaikinMoneyFlowType \
+	ChaikinMoneyFlowEngine \
+	ChaikinMoneyFlow
+ChaikinMoneyFlowType: $(CMF)/source/ChaikinMoneyFlowType.cpp 
+	$(CC) -c $(CMF)/source/ChaikinMoneyFlowType.cpp -o build/ChaikinMoneyFlowType.o -I build
+ChaikinMoneyFlowEngine: $(CMF)/source/ChaikinMoneyFlowEngine.cpp 
+	$(CC) -c $(CMF)/source/ChaikinMoneyFlowEngine.cpp -o build/ChaikinMoneyFlowEngine.o -I build
+ChaikinMoneyFlow: $(CMF)/source/ChaikinMoneyFlow.cpp 
+	$(CC) -c $(CMF)/source/ChaikinMoneyFlow.cpp -o build/ChaikinMoneyFlow.o -I build
+	
 TestExec: src/main.cpp 
 	$(CC) -o TestExec src/main.cpp build/Price.o build/DateEngine.o build/ClassTemplate.o \
-	      build/PriceContainer.o -I build 
+	      build/PriceContainer.o build/ChaikinMoneyFlow.o build/ChaikinMoneyFlowType.o \
+	      build/ChaikinMoneyFlowEngine.o -I build 
