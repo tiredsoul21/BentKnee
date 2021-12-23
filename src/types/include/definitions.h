@@ -1,20 +1,26 @@
-#ifndef TYPEDEFINITIONS_H
-#define TYPEDEFINITIONS_H
+#ifndef DEFINITIONS_H
+#define DEFINITIONS_H
 
 #include <string>
 
-namespace TypeDefinitions {
+class Definitions
+{
+    
+public:
 
-    enum class AverageTypes {
-        null = 0,
-        simpleMovingAverage = 1,
-        linearWeightedAverage = 2,
-        exponentialMovingAverage = 3
+    // Type for my smoothing type selection
+    enum class SmoothingType
+    {
+        MovingAverage = 0,
+        Exponential = 1,
+        DoubleExponential = 2,
+        HoltWinters = 3
     };
 
 
 
-    enum class PriceType {
+    enum class PriceType
+    {
         Close = 0,
         Open = 1,
         Low = 2,
@@ -22,7 +28,8 @@ namespace TypeDefinitions {
         Adjusted = 4
     };
 
-    enum class TD_PeriodType {
+    enum class TD_PeriodType
+    {
         day = 0,
         month = 1,
         year = 2,
@@ -30,7 +37,8 @@ namespace TypeDefinitions {
 
     };
 
-    enum class TD_FrequencyType {
+    enum class TD_FrequencyType
+    {
         minute = 0,
         daily = 1,
         weekly = 2,
@@ -46,7 +54,7 @@ namespace TypeDefinitions {
     * Output(s):
     *   string - representing the enumeration desired
     ---------------------------------------------------------------*/
-    std::string periodTypeMap(TD_PeriodType);
+    std::string periodTypeMap(TD_PeriodType period);
 
     // Frequency Type Map //
     /*--------------------------------------------------------------
@@ -56,8 +64,8 @@ namespace TypeDefinitions {
     * Output(s):
     *   string - representing the enumeration desired
     ---------------------------------------------------------------*/
-    std::string frequencyTypeMap(TD_FrequencyType);
-}
+    std::string frequencyTypeMap(TD_FrequencyType frequency);
+};
 
 
 #endif

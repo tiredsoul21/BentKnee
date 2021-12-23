@@ -208,19 +208,19 @@ char Price::getIncrement()
 }
 
 // selectData //
-float Price::selectData(TypeDefinitions::PriceType selected)
+float Price::selectData(Definitions::PriceType selected)
 {
 	switch (selected)
 	{
-	case TypeDefinitions::PriceType::Close:
+	case Definitions::PriceType::Close:
 		return this->myClose;
-	case TypeDefinitions::PriceType::Open:
+	case Definitions::PriceType::Open:
 		return this->myOpen;
-	case TypeDefinitions::PriceType::High:
+	case Definitions::PriceType::High:
 		return this->myHigh;
-	case TypeDefinitions::PriceType::Low:
+	case Definitions::PriceType::Low:
 		return this->myLow;
-	case TypeDefinitions::PriceType::Adjusted:
+	case Definitions::PriceType::Adjusted:
 		return this->myAdjusted;
 	default:
 		// Error handling left to handler

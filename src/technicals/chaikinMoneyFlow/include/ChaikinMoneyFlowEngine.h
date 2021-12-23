@@ -11,8 +11,8 @@
 #include "ClassTemplate.h"
 #endif
 
-#ifndef CHAIKINMONEYFLOWTYPE_H
-#include "ChaikinMoneyFlowType.h"
+#ifndef SINGLEDATATYPE_H
+#include "SingleDataType.h"
 #endif
 
 class ChaikinMoneyFlowEngine: public ClassTemplate
@@ -45,9 +45,9 @@ public: // Public Methods
      *   float - high price for the time period
      *   long - volume for the time period
      * Output(s):
-     *   ChaikinMoneyFlowType - the indicator for this period
+     *   SingleDataType - the indicator for this period
      ---------------------------------------------------------------*/    
-    ChaikinMoneyFlowType nextEntry(float close, float low, 
+    SingleDataType nextEntry(float close, float low, 
                                    float high, long volume);
     
     // Set Average Size //

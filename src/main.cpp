@@ -8,8 +8,10 @@
 
 #include <string>
 
+#include "Definitions.h"
 #include "PriceContainer.h"
 #include "ChaikinMoneyFlow.h"
+#include "SmoothingEngine.h"
 
 void parseCSV(PriceContainer* container);
 
@@ -26,13 +28,17 @@ int main()
     std::cout << "Parse-------------------" << std::endl;
     parseCSV(&container);
     ChaikinMoneyFlow cmf = ChaikinMoneyFlow(&container, 21);
+    SmoothingEngine mySmoothingEngine = SmoothingEngine(Definitions::SmoothingType::Exponential);
+    mySmoothingEngine.setHistoricalSig(.7);
     
+    std::ofstream myfile;
+    myfile.open ("C:/Users/derri/Desktop/QQQ.csv");
     for (auto it = cmf.begin(); it !=  cmf.end(); it++)
     {
-        std::cout << std::to_string(it->first) << "\t";
-        std::cout << std::to_string(it->second.getChaikinMoneyFlow());
-        std::cout << std::endl;
+        myfile << mySmoothingEngine.nextEntry(it->second.getData()) << ", ";
+        myfile << it->second.getData() << "\n";
     }
+    myfile.close();
     
     std::cout << "Report------------------" << std::endl;
     
