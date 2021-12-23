@@ -4,22 +4,25 @@ OBJECTS = -I build
 ROOT = C:/Users/derri/Desktop/Project/CppFirstProgram
 
 CMN = src/common
-DEFS = src/definitions
 DATA_ARCH= src/dataArchitecture
 TECH = src/technicals
+TYPES = src/types
 CMF = $(TECH)/chaikinMoneyFlow
+ANLYS = src/analytics
 
 # Build all, in order of dependency
 all: CloneHeaders \
 	Common \
-	Definitions \
+	Types \
+	Analytics \
 	DataArchitecture \
 	Technicals \
 	TestExec
 
 CloneHeaders:
-	cp -f $(CMN)/include/* \
-	$(DEFS)/include/* \
+	cp -f $(TYPES)/include/* \
+	$(CMN)/include/* \
+	$(ANLYS)/include/* \
 	$(DATA_ARCH)/include/* \
 	$(CMF)/include/* \
 	build
@@ -28,8 +31,16 @@ Common: ClassTemplate
 ClassTemplate: $(CMN)/source/ClassTemplate.cpp 
 	$(CC) -c $(CMN)/source/ClassTemplate.cpp -o build/ClassTemplate.o -I build
 
-Definitions: $(DEFS)/source/typeDefinitions.cpp
-	$(CC) -c $(DEFS)/source/typeDefinitions.cpp -o build/typeDefinitions.o -I build
+Types: Definitions \
+	SingleDataType
+Definitions: $(TYPES)/source/Definitions.cpp
+	$(CC) -c $(TYPES)/source/Definitions.cpp -o build/Definitions.o -I build
+SingleDataType: $(TYPES)/source/SingleDataType.cpp
+	$(CC) -c $(TYPES)/source/SingleDataType.cpp -o build/SingleDataType.o -I build
+
+Analytics: SmoothingEngine
+SmoothingEngine: $(ANLYS)/source/SmoothingEngine.cpp
+	$(CC) -c $(ANLYS)/source/SmoothingEngine.cpp -o build/SmoothingEngine.o -I build
 
 DataArchitecture: DateEngine \
 	Price \
@@ -43,11 +54,8 @@ PriceContainer: $(DATA_ARCH)/source/PriceContainer.cpp
 
 Technicals: ChaikinMoneyFlow
 	
-ChaikinMoneyFlow: ChaikinMoneyFlowType \
-	ChaikinMoneyFlowEngine \
+ChaikinMoneyFlow: ChaikinMoneyFlowEngine \
 	ChaikinMoneyFlow
-ChaikinMoneyFlowType: $(CMF)/source/ChaikinMoneyFlowType.cpp 
-	$(CC) -c $(CMF)/source/ChaikinMoneyFlowType.cpp -o build/ChaikinMoneyFlowType.o -I build
 ChaikinMoneyFlowEngine: $(CMF)/source/ChaikinMoneyFlowEngine.cpp 
 	$(CC) -c $(CMF)/source/ChaikinMoneyFlowEngine.cpp -o build/ChaikinMoneyFlowEngine.o -I build
 ChaikinMoneyFlow: $(CMF)/source/ChaikinMoneyFlow.cpp 
@@ -55,5 +63,5 @@ ChaikinMoneyFlow: $(CMF)/source/ChaikinMoneyFlow.cpp
 	
 TestExec: src/main.cpp 
 	$(CC) -o TestExec src/main.cpp build/Price.o build/DateEngine.o build/ClassTemplate.o \
-	      build/PriceContainer.o build/ChaikinMoneyFlow.o build/ChaikinMoneyFlowType.o \
-	      build/ChaikinMoneyFlowEngine.o -I build 
+	      build/PriceContainer.o build/ChaikinMoneyFlow.o build/ChaikinMoneyFlowEngine.o \
+	      build/SmoothingEngine.o build/SingleDataType.o -I build 

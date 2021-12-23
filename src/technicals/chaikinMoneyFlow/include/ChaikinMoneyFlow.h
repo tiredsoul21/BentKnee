@@ -24,15 +24,15 @@
 #include "PriceContainer.h"
 #endif
 
-#ifndef CHAIKINMONEYFLOWTYPE_H
-#include "ChaikinMoneyFlowType.h"
+#ifndef SINGLEDATATYPE_H
+#include "SingleDataType.h"
 #endif
 
 #ifndef CHAIKINMONEYFLOWENGINE_H
 #include "ChaikinMoneyFlowEngine.h"
 #endif
 
-class ChaikinMoneyFlow: public ContainerTemplate<ChaikinMoneyFlowType>
+class ChaikinMoneyFlow: public ContainerTemplate<SingleDataType>
 {
 public: // Public Methods
 
@@ -49,7 +49,7 @@ public: // Public Methods
 private: // Private Members
     
     // Engine to generate technicals data
-    ChaikinMoneyFlowEngine myEngine = new  ChaikinMoneyFlowEngine();
+    ChaikinMoneyFlowEngine myEngine = ChaikinMoneyFlowEngine();
 };
 
 #endif

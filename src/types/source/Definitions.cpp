@@ -1,8 +1,9 @@
-#ifndef TYPEDEFINITIONS_H
-#include "typeDefinitions.h"
+#ifndef DEFINITIONS_H
+#include "Definitions.h"
 #endif
 
-std::string TypeDefinitions::periodTypeMap(TD_PeriodType period)
+// TD Period Type Map //
+std::string Definitions::periodTypeMap(TD_PeriodType period)
 {
     switch (period) {
         case TD_PeriodType::day:
@@ -18,7 +19,8 @@ std::string TypeDefinitions::periodTypeMap(TD_PeriodType period)
     }
 }
 
-std::string TypeDefinitions::frequencyTypeMap(TD_FrequencyType frequency)
+// Frequency Type Map //
+std::string Definitions::frequencyTypeMap(TD_FrequencyType frequency)
 {
     switch (frequency) {
         case TD_FrequencyType::minute:
@@ -33,3 +35,4 @@ std::string TypeDefinitions::frequencyTypeMap(TD_FrequencyType frequency)
             return "BAD";
     }
 }
+

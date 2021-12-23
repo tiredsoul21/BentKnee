@@ -9,7 +9,7 @@ ChaikinMoneyFlow::ChaikinMoneyFlow(PriceContainer* priceContainer, int size)
     std::map<double, Price>::iterator it;
     for (it = priceContainer->begin(); it != priceContainer->end(); it++)
     {
-        myEngine->setAverageSize(size);
+        myEngine.setAverageSize(size);
         add(it->first, myEngine.nextEntry(it->second.getClose(), 
                                           it->second.getLow(),
                                           it->second.getHigh(), 

@@ -21,8 +21,8 @@ void ChaikinMoneyFlowEngine::setAverageSize(int size)
 
 /************************ FUNCTIONAL *******************************/
 
-ChaikinMoneyFlowType ChaikinMoneyFlowEngine::nextEntry(float close, float low, 
-                                                       float high, long volume)
+SingleDataType ChaikinMoneyFlowEngine::nextEntry(float close, float low, 
+                                             float high, long volume)
 {
     // Make this iterations preliminary calculations
     double multiplier = (2*close - low - high) / (high - low);
@@ -59,6 +59,8 @@ ChaikinMoneyFlowType ChaikinMoneyFlowEngine::nextEntry(float close, float low,
     }
     float cmfValue = flowVolumeSum / volumeSum;
 
-    return ChaikinMoneyFlowType(cmfValue, isMature);
+    SingleDataType myReturn = SingleDataType(cmfValue, isMature);
+    myReturn.setDataName("Chaikin Money Flow");
+    return myReturn;
 }
 

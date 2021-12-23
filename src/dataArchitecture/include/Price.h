@@ -5,8 +5,8 @@
 #ifndef PRICE_H
 #define PRICE_H
 
-#ifndef TYPEDEFINITIONS_H
-#include "typeDefinitions.h"
+#ifndef DEFINITIONS_H
+#include "Definitions.h"
 #endif
 
 #ifndef CLASSTEMPLATE_H
@@ -167,7 +167,7 @@ public: // Public Methods
 	 * Output(s):
 	 *   float - single price datum for the iterator supplied
 	 ---------------------------------------------------------------*/
-	float selectData(TypeDefinitions::PriceType selected);
+	float selectData(Definitions::PriceType selected);
 
 private: // Private Members
 
