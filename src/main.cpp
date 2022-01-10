@@ -12,6 +12,8 @@
 #include "PriceContainer.h"
 #include "ChaikinMoneyFlow.h"
 #include "SmoothingEngine.h"
+#include "DerivativeEngine.h"
+#include "DataType3.h"
 
 void parseCSV(PriceContainer* container);
 
@@ -29,14 +31,34 @@ int main()
     parseCSV(&container);
     ChaikinMoneyFlow cmf = ChaikinMoneyFlow(&container, 21);
     SmoothingEngine mySmoothingEngine = SmoothingEngine(Definitions::SmoothingType::Exponential);
+    DerivativeEngine myDerivEngine = DerivativeEngine();
+    DerivativeEngine myDerivEngine2 = DerivativeEngine();
+    myDerivEngine2.setDerivativeStep(2);
     mySmoothingEngine.setHistoricalSig(.7);
     
     std::ofstream myfile;
     myfile.open ("C:/Users/derri/Desktop/QQQ.csv");
     for (auto it = cmf.begin(); it !=  cmf.end(); it++)
     {
-        myfile << mySmoothingEngine.nextEntry(it->second.getData()) << ", ";
-        myfile << it->second.getData() << "\n";
+        double smoothCmf = mySmoothingEngine.nextEntry(it->second.getData());
+        DataType3 myDerivs = myDerivEngine.nextEntry(smoothCmf);
+        DataType3 myDerivs2 = myDerivEngine2.nextEntry(smoothCmf);
+        
+        myfile << it->second.getData();
+        myfile << ", " << smoothCmf << ", " ;
+        if (myDerivs.isData1Set())
+            myfile << myDerivs.getData1() << ", ";
+        if (myDerivs.isData2Set())
+            myfile << myDerivs.getData2() << ", ";
+        if (myDerivs.isData3Set())
+            myfile << myDerivs.getData3() << ", ";
+        if (myDerivs2.isData1Set())
+            myfile << myDerivs2.getData1() << ", ";
+        if (myDerivs2.isData2Set())
+            myfile << myDerivs2.getData2() << ", ";
+        if (myDerivs2.isData3Set())
+            myfile << myDerivs2.getData3();
+        myfile << "\n";
     }
     myfile.close();
     

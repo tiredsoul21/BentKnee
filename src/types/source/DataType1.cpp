@@ -1,19 +1,20 @@
-#ifndef SINGLEDATATYPE_H
-#include "SingleDataType.h"
+#ifndef DATATYPE1_H
+#include "DataType1.h"
 #endif
    
 /*********************** CONSTRUCTORS ******************************/
 
-SingleDataType::SingleDataType(float datum, bool mature) 
+DataType1::DataType1(double datum, bool mature) 
 {
     this->mature = mature;
     myData = datum;
+    dataSet = true;
 }
 
 /************************ SETTERS *******************************/
 
 // Set Data Name //
-void SingleDataType::setDataName(std::string name)
+void DataType1::setDataName(std::string name)
 {
     myDataName = name;
 }
@@ -21,19 +22,25 @@ void SingleDataType::setDataName(std::string name)
 /************************ GETTERS *******************************/
 
 // Get Data //
-float SingleDataType::getData()
+double DataType1::getData()
 {
     return myData;
 }
 
 // Get Data Name //
-std::string SingleDataType::getDataName()
+std::string DataType1::getDataName()
 {
     return myDataName;
 }
 
 // Is Mature //
-bool SingleDataType::isMature()
+bool DataType1::isMature()
 {
     return mature;
+}
+
+// Is Data Set //
+bool DataType1::isDataSet()
+{
+    return dataSet;
 }
