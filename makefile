@@ -32,15 +32,21 @@ ClassTemplate: $(CMN)/source/ClassTemplate.cpp
 	$(CC) -c $(CMN)/source/ClassTemplate.cpp -o build/ClassTemplate.o -I build
 
 Types: Definitions \
-	SingleDataType
+	DataType1 \
+	DataType3
 Definitions: $(TYPES)/source/Definitions.cpp
 	$(CC) -c $(TYPES)/source/Definitions.cpp -o build/Definitions.o -I build
-SingleDataType: $(TYPES)/source/SingleDataType.cpp
-	$(CC) -c $(TYPES)/source/SingleDataType.cpp -o build/SingleDataType.o -I build
+DataType1: $(TYPES)/source/DataType1.cpp
+	$(CC) -c $(TYPES)/source/DataType1.cpp -o build/DataType1.o -I build
+DataType3: $(TYPES)/source/DataType3.cpp
+	$(CC) -c $(TYPES)/source/DataType3.cpp -o build/DataType3.o -I build
 
-Analytics: SmoothingEngine
+Analytics: SmoothingEngine \
+	DerivativeEngine
 SmoothingEngine: $(ANLYS)/source/SmoothingEngine.cpp
 	$(CC) -c $(ANLYS)/source/SmoothingEngine.cpp -o build/SmoothingEngine.o -I build
+DerivativeEngine: $(ANLYS)/source/DerivativeEngine.cpp
+	$(CC) -c $(ANLYS)/source/DerivativeEngine.cpp -o build/DerivativeEngine.o -I build
 
 DataArchitecture: DateEngine \
 	Price \
@@ -64,4 +70,5 @@ ChaikinMoneyFlow: $(CMF)/source/ChaikinMoneyFlow.cpp
 TestExec: src/main.cpp 
 	$(CC) -o TestExec src/main.cpp build/Price.o build/DateEngine.o build/ClassTemplate.o \
 	      build/PriceContainer.o build/ChaikinMoneyFlow.o build/ChaikinMoneyFlowEngine.o \
-	      build/SmoothingEngine.o build/SingleDataType.o -I build 
+	      build/SmoothingEngine.o build/DerivativeEngine.o build/DataType1.o \
+	      build/DataType3.o -I build 

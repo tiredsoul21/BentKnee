@@ -24,15 +24,15 @@
 #include "PriceContainer.h"
 #endif
 
-#ifndef SINGLEDATATYPE_H
-#include "SingleDataType.h"
+#ifndef DATATYPE1_H
+#include "DataType1.h"
 #endif
 
 #ifndef CHAIKINMONEYFLOWENGINE_H
 #include "ChaikinMoneyFlowEngine.h"
 #endif
 
-class ChaikinMoneyFlow: public ContainerTemplate<SingleDataType>
+class ChaikinMoneyFlow: public ContainerTemplate<DataType1>
 {
 public: // Public Methods
 
